@@ -1,6 +1,9 @@
 name: Taiwan day-trade screener
 
 on:
+  push:
+    branches: [main]
+    paths: [config.toml, daytrade.py, .github/workflows/daytrade.yml]   # editing these re-runs immediately (no email)
   schedule:
     # Times are UTC (Taipei = UTC+8). GitHub may start runs late or skip them, so there is a retry;
     # a retry after a complete run does nothing.

@@ -15,7 +15,7 @@ FORCE=true python -u daytrade.py       # run on a closed day
 
 ## How it runs
 
-`.github/workflows/daytrade.yml` runs at 19:00 and 20:30 Taipei on weekdays and on demand, then commits `docs/` and `data/` back to `main` as "Update screener …", so pull with `git pull --rebase` before pushing. `docs/index.html` is served by GitHub Pages. A scheduled run skips once the day finished without errors, retries if data was missing, and emails at most once a day (SMTP settings are GitHub Secrets; locally, `secrets.bat`, which is ignored by git).
+`.github/workflows/daytrade.yml` runs at 19:00 and 20:30 Taipei on weekdays, on pushes that touch `config.toml`, `daytrade.py` or the workflow, and on demand, then commits `docs/` and `data/` back to `main` as "Update screener …", so pull with `git pull --rebase` before pushing. `docs/index.html` is served by GitHub Pages. A scheduled run skips once the day finished without errors, retries if data was missing, and emails at most once a day (SMTP settings are GitHub Secrets; locally, `secrets.bat`, which is ignored by git).
 
 ## Rules that matter
 
