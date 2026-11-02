@@ -1,0 +1,3 @@
+# Generated on GitHub's Linux runners and read back on any machine; never convert line endings.
+data/** -text
+docs/** -text

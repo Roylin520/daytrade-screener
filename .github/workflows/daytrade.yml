@@ -1,0 +1,58 @@
+name: Taiwan day-trade screener
+
+on:
+  schedule:
+    # Times are UTC (Taipei = UTC+8). GitHub may start runs late or skip them, so there is a retry;
+    # a retry after a complete run does nothing.
+    - cron: "0 11 * * 1-5"    # 19:00 Taipei
+    - cron: "30 12 * * 1-5"   # 20:30 Taipei retry
+  workflow_dispatch:           # allows a manual "Run workflow" button
+    inputs:
+      test_email:
+        description: "寄一封測試信"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daytrade
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: Asia/Taipei
+    steps:
+      # Check out the branch tip, not the triggering commit: a re-run would otherwise start from
+      # data/ files that later runs have already replaced.
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Run screener
+        run: python -u daytrade.py
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          TEST_EMAIL: ${{ inputs.test_email }}
+          SCHEDULED: ${{ github.event_name == 'schedule' }}
+
+      - name: Commit report and history
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs data
+          git diff --cached --quiet || git commit -m "Update screener $(date '+%Y-%m-%d %H:%M')"
+          # If another run committed meanwhile, keep this run's newer data/ and docs/ on conflict.
+          git pull --rebase --quiet -X theirs
+          git push

@@ -1,0 +1,7 @@
+﻿date,strategy,code,name,side,entry,stop,target,cost_pct,next_date,next_open,next_high,next_low,next_close,pct_cons,pct_opt
+2026-11-02,current,3189,景碩,short,879,906,826,0.663,,,,,,,
+2026-11-02,current,3481,群創,long,45.35,44.4,47.2,0.656,,,,,,,
+2026-11-02,current,4958,臻鼎-KY,short,469.5,481.5,445.5,0.648,,,,,,,
+2026-11-02,near,3189,景碩,short,879,905,867,0.663,,,,,,,
+2026-11-02,near,3481,群創,long,45.35,44.0,45.75,0.656,,,,,,,
+2026-11-02,near,4958,臻鼎-KY,short,469.5,483.5,464.0,0.648,,,,,,,
